@@ -1,12 +1,12 @@
 import React, { useEffect, useReducer } from "react";
 import { initialState, reducer } from "../reducer/reducer";
-import { checkDate } from "../helpers/validate";
 import { loremIpsum } from "../helpers/loremIpsum";
 import {
   inputClassGenerator,
   checkboxClassGenerator,
 } from "../helpers/generators";
 import { finalValidation } from "../helpers/validate";
+import InputField from "./InputField";
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -17,7 +17,6 @@ const Form = () => {
     email,
     password,
     tel,
-    dof,
     validateName,
     validateSurname,
     validateEmail,
@@ -49,7 +48,7 @@ const Form = () => {
 
   useEffect(() => {
     if (validate) {
-      console.log("ПЕРЕАДРЕСАЦИЯ");
+      window.open("vk.com");
     }
   }, [validate]);
 
@@ -58,67 +57,70 @@ const Form = () => {
       <div className="form">
         <h1 className="head">Register Form</h1>
         <form onSubmit={submitForm} className="register-form">
-          <label className="sr-only" htmlFor="name">
-            Name
-          </label>
-          <input
-            onChange={(e) => {
-              onChangeFunc("SET_NAME", "VALIDATE_NAME", e.target.value);
-            }}
+          <InputField
+            type={"text"}
+            onChange={(e) =>
+              onChangeFunc("SET_NAME", "VALIDATE_NAME", e.target.value)
+            }
             value={name.replace(/\d/g, "")}
             className={inputClassGenerator(validateName)}
             maxLength={20}
-            id="name"
-            type="text"
-            placeholder="Имя"
+            minLength={1}
+            id={"name"}
+            placeholder={"Имя"}
+            name={"name"}
+            ariaLabel={"Name"}
+            ariaInvaild={validateName ? "false" : "true"}
           />
-          <label className="sr-only" htmlFor="surname">
-            Surname
-          </label>
-          <input
-            onChange={(e) => {
-              onChangeFunc("SET_SURNAME", "VALIDATE_SURNAME", e.target.value);
-            }}
+          <InputField
+            type={"text"}
+            onChange={(e) =>
+              onChangeFunc("SET_SURNAME", "VALIDATE_SURNAME", e.target.value)
+            }
             value={surname.replace(/\d/g, "")}
             className={inputClassGenerator(validateSurname)}
             maxLength={30}
-            id="surname"
-            type="text"
-            placeholder="Фамилия"
+            minLength={1}
+            id={"surname"}
+            placeholder={"Фамилия"}
+            name={"surname"}
+            aria-label={"Surname"}
+            aria-invalid={validateSurname ? "false" : "true"}
           />
-          <label className="sr-only" htmlFor="email">
-            Email
-          </label>
-          <input
-            onChange={(e) => {
-              onChangeFunc("SET_EMAIL", "VALIDATE_EMAIL", e.target.value);
-            }}
+          <InputField
+            type={"email"}
+            onChange={(e) =>
+              onChangeFunc("SET_EMAIL", "VALIDATE_EMAIL", e.target.value)
+            }
             value={email}
             className={inputClassGenerator(validateEmail)}
-            maxLength={40}
-            id="email"
-            type="email"
-            placeholder="Электронная почта"
+            maxLength={50}
+            minLength={6}
+            id={"email"}
+            placeholder={"Электронная почта"}
+            name={"emal"}
+            aria-label={"Email"}
+            aria-invalid={validateEmail ? "false" : "true"}
           />
-
           <div className="tooltip-container">
-            <label className="sr-only" htmlFor="password">
-              Password
-            </label>
-            <input
-              onChange={(e) => {
+            <InputField
+              type={"password"}
+              onChange={(e) =>
                 onChangeFunc(
                   "SET_PASSWORD",
                   "VALIDATE_PASSWORD",
                   e.target.value
-                );
-              }}
+                )
+              }
               value={password}
               className={inputClassGenerator(validatePassword)}
-              maxLength={15}
-              id="password"
-              type="password"
-              placeholder="Пароль"
+              maxLength={16}
+              minLength={8}
+              id={"password"}
+              placeholder={"Пароль"}
+              name={"password"}
+              aria-label={"Password"}
+              aria-invalid={validatePassword ? "false" : "true"}
             />
             <div className="tooltip-content">
               Пароль должен содержать хотя бы одну цифру, одну строчную и одну
@@ -126,20 +128,19 @@ const Form = () => {
               # $ % ^ & *. <br /> Длина пароля должна быть не менее 8 символов.
             </div>
           </div>
-
-          <label className="sr-only" htmlFor="tel">
-            Tel Number
-          </label>
-          <input
-            onChange={(e) => {
-              onChangeFunc("SET_TEL", "VALIDATE_TEL", e.target.value);
-            }}
+          <InputField
+            type={"tel"}
+            onChange={(e) =>
+              onChangeFunc("SET_TEL", "VALIDATE_TEL", e.target.value)
+            }
             value={tel.replace(/[A-Za-zА-Яа-яЁё]/, "")}
             className={inputClassGenerator(validatePhone)}
             maxLength={25}
-            id="tel"
-            type="tel"
-            placeholder="Номер телефона"
+            id={"tel"}
+            placeholder={"Номер телефона"}
+            name={"number"}
+            aria-label={"Number"}
+            aria-invalid={validatePhone ? "false" : "true"}
           />
           <div className="day-of_birthday">
             <label className="sr-only" htmlFor="date">
@@ -156,14 +157,24 @@ const Form = () => {
           </div>
           <div className="license-container">
             <div className="license-item">
+              <label htmlFor="licence" className="sr-only">
+                LICENSE
+              </label>
               <input
+                type="checkbox"
                 onChange={(e) =>
                   e.target.checked
                     ? dispatch({ type: "VALIDATE_LICENSE", payload: true })
                     : dispatch({ type: "VALIDATE_LICENSE", payload: false })
                 }
+                value={validateLicense}
+                maxLength={0}
+                minLength={0}
                 className="check-license"
-                type="checkbox"
+                id="license"
+                name="license"
+                aria-label={"License"}
+                aria-invalid={validateLicense ? "true" : "false"}
               />
               <span className={checkboxClassGenerator(validateLicense)}>
                 Согласен с правилами пользования [Имя ресурса] [Правила
@@ -178,12 +189,16 @@ const Form = () => {
               </div>
             </div>
             <div className="license-item">
+              <label htmlFor="rules" className="sr-only">
+                RULES
+              </label>
               <input
                 onChange={(e) =>
                   e.target.checked
                     ? dispatch({ type: "VALIDATE_RULES", payload: true })
                     : dispatch({ type: "VALIDATE_RULES", payload: false })
                 }
+                id="rules"
                 className="check-license"
                 type="checkbox"
               />
@@ -203,10 +218,6 @@ const Form = () => {
               type="submit"
             />
             <div className={validate ? "spinner" : "spinner-none"}></div>
-            <div className="checkmark-container">
-              <input type="checkbox" id="checkbox" className="checkbox" />
-              <label htmlFor="checkbox" className="checkmark"></label>
-            </div>
           </div>
         </form>
       </div>
