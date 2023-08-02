@@ -1,8 +1,12 @@
 import React, { useEffect, useReducer } from "react";
-import { initialState, reducer } from "./reducer/reducer";
-import { checkDate } from "./helpers/validate";
-import { loremIpsum } from "./helpers/loremIpsum";
-import cn from "classnames";
+import { initialState, reducer } from "../reducer/reducer";
+import { checkDate } from "../helpers/validate";
+import { loremIpsum } from "../helpers/loremIpsum";
+import {
+  inputClassGenerator,
+  checkboxClassGenerator,
+} from "../helpers/generators";
+import { finalValidation } from "../helpers/validate";
 
 const Form = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -26,22 +30,21 @@ const Form = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    dispatch({ type: "VALIDATE_NAME" });
-    dispatch({ type: "VALIDATE_SURNAME" });
-    dispatch({ type: "VALIDATE_EMAIL" });
-    dispatch({ type: "VALIDATE_PASSWORD" });
-    dispatch({ type: "VALIDATE_TEL" });
-    if (
-      validateName === true &&
-      validateSurname === true &&
-      validateEmail === true &&
-      validatePassword === true &&
-      validatePhone === true &&
-      validateLicense === true &&
-      validateRules === true
-    ) {
-      return dispatch({ type: "SET_VALIDATE", payload: true });
-    }
+    const formValidate = [
+      validateName,
+      validateSurname,
+      validateEmail,
+      validatePassword,
+      validatePhone,
+      validateLicense,
+      validateRules,
+    ];
+    finalValidation(formValidate, dispatch);
+  };
+
+  const onChangeFunc = (type, validateType, value) => {
+    dispatch({ type: type, payload: value });
+    dispatch({ type: validateType });
   };
 
   useEffect(() => {
@@ -49,48 +52,6 @@ const Form = () => {
       console.log("ПЕРЕАДРЕСАЦИЯ");
     }
   }, [validate]);
-
-  const nameClasses = cn("form-input", {
-    "": validateName === "begin",
-    "red-border": validateName === false,
-    "green-border": validateName === true,
-  });
-
-  const surnameClasses = cn("form-input", {
-    "": validateSurname === "begin",
-    "red-border": validateSurname === false,
-    "green-border": validateSurname === true,
-  });
-
-  const emailClasses = cn("form-input", {
-    "": validateEmail === "begin",
-    "red-border": validateEmail === false,
-    "green-border": validateEmail === true,
-  });
-
-  const passwordClasses = cn("form-input", {
-    "": validatePassword === "begin",
-    "red-border": validatePassword === false,
-    "green-border": validatePassword === true,
-  });
-
-  const phoneClasses = cn("form-input", {
-    "": validatePhone === "begin",
-    "red-border": validatePhone === false,
-    "green-border": validatePhone === true,
-  });
-
-  const licenseClasses = cn("license", {
-    "": validateLicense === "begin",
-    "red-text": validateLicense === false,
-    license: validateLicense === true,
-  });
-
-  const rulesClasses = cn("license", {
-    "": validateRules === "begin",
-    "red-text": validateRules === false,
-    license: validateRules === true,
-  });
 
   return (
     <div className="form-container">
@@ -102,11 +63,10 @@ const Form = () => {
           </label>
           <input
             onChange={(e) => {
-              dispatch({ type: "SET_NAME", payload: e.target.value });
-              dispatch({ type: "VALIDATE_NAME" });
+              onChangeFunc("SET_NAME", "VALIDATE_NAME", e.target.value);
             }}
             value={name.replace(/\d/g, "")}
-            className={nameClasses}
+            className={inputClassGenerator(validateName)}
             maxLength={20}
             id="name"
             type="text"
@@ -117,11 +77,10 @@ const Form = () => {
           </label>
           <input
             onChange={(e) => {
-              dispatch({ type: "SET_SURNAME", payload: e.target.value });
-              dispatch({ type: "VALIDATE_SURNAME" });
+              onChangeFunc("SET_SURNAME", "VALIDATE_SURNAME", e.target.value);
             }}
             value={surname.replace(/\d/g, "")}
-            className={surnameClasses}
+            className={inputClassGenerator(validateSurname)}
             maxLength={30}
             id="surname"
             type="text"
@@ -132,11 +91,10 @@ const Form = () => {
           </label>
           <input
             onChange={(e) => {
-              dispatch({ type: "SET_EMAIL", payload: e.target.value });
-              dispatch({ type: "VALIDATE_EMAIL" });
+              onChangeFunc("SET_EMAIL", "VALIDATE_EMAIL", e.target.value);
             }}
             value={email}
-            className={emailClasses}
+            className={inputClassGenerator(validateEmail)}
             maxLength={40}
             id="email"
             type="email"
@@ -149,17 +107,20 @@ const Form = () => {
             </label>
             <input
               onChange={(e) => {
-                dispatch({ type: "SET_PASSWORD", payload: e.target.value });
-                dispatch({ type: "VALIDATE_PASSWORD" });
+                onChangeFunc(
+                  "SET_PASSWORD",
+                  "VALIDATE_PASSWORD",
+                  e.target.value
+                );
               }}
               value={password}
-              className={passwordClasses}
+              className={inputClassGenerator(validatePassword)}
               maxLength={15}
               id="password"
               type="password"
               placeholder="Пароль"
             />
-            <div class="tooltip-content">
+            <div className="tooltip-content">
               Пароль должен содержать хотя бы одну цифру, одну строчную и одну
               прописную букву, а также хотя бы один из специальных символов: ! @
               # $ % ^ & *. <br /> Длина пароля должна быть не менее 8 символов.
@@ -171,11 +132,10 @@ const Form = () => {
           </label>
           <input
             onChange={(e) => {
-              dispatch({ type: "SET_TEL", payload: e.target.value });
-              dispatch({ type: "VALIDATE_TEL" });
+              onChangeFunc("SET_TEL", "VALIDATE_TEL", e.target.value);
             }}
             value={tel.replace(/[A-Za-zА-Яа-яЁё]/, "")}
-            className={phoneClasses}
+            className={inputClassGenerator(validatePhone)}
             maxLength={25}
             id="tel"
             type="tel"
@@ -205,7 +165,7 @@ const Form = () => {
                 className="check-license"
                 type="checkbox"
               />
-              <span className={licenseClasses}>
+              <span className={checkboxClassGenerator(validateLicense)}>
                 Согласен с правилами пользования [Имя ресурса] [Правила
                 пользования]
               </span>
@@ -228,7 +188,9 @@ const Form = () => {
                 type="checkbox"
               />
 
-              <span className={rulesClasses}>Согласен на обработку данных</span>
+              <span className={checkboxClassGenerator(validateRules)}>
+                Согласен на обработку данных
+              </span>
             </div>
           </div>
           <div className="submit-container">
@@ -241,9 +203,9 @@ const Form = () => {
               type="submit"
             />
             <div className={validate ? "spinner" : "spinner-none"}></div>
-            <div class="checkmark-container">
-              <input type="checkbox" id="checkbox" class="checkbox" />
-              <label for="checkbox" class="checkmark"></label>
+            <div className="checkmark-container">
+              <input type="checkbox" id="checkbox" className="checkbox" />
+              <label htmlFor="checkbox" className="checkmark"></label>
             </div>
           </div>
         </form>

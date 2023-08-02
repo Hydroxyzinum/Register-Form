@@ -21,7 +21,16 @@ export const checkPhoneNumber = (phoneNumber) => {
 
 export const checkDate = (date) => {
   const newDate = new Date(date);
-  console.log(newDate)
-}
+  console.log(newDate);
+};
 
-
+export const finalValidation = (arr, dispatch) => {
+  dispatch({ type: "VALIDATE_NAME" });
+  dispatch({ type: "VALIDATE_SURNAME" });
+  dispatch({ type: "VALIDATE_EMAIL" });
+  dispatch({ type: "VALIDATE_PASSWORD" });
+  dispatch({ type: "VALIDATE_TEL" });
+  arr.includes(false || 'begin')
+    ? dispatch({ type: "SET_VALIDATE", payload: false })
+    : dispatch({ type: "SET_VALIDATE", payload: true });
+};

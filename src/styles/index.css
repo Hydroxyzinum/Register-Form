@@ -51,7 +51,7 @@ body {
 }
 
 .head {
-  margin: 10px;
+  margin: 20px 10px;
   font-size: 36px;
   font-weight: 400;
 }
@@ -322,7 +322,7 @@ input:focus {
   transition: opacity 0.2s;
 }
 
-.checkbox:checked + .checkmark {
+.checkbox:checked+.checkmark {
   animation: drawCheckmark 0.5s forwards;
 }
 
@@ -332,16 +332,19 @@ input:focus {
     height: 0;
     opacity: 1;
   }
+
   25% {
     width: 0;
     height: 20px;
     opacity: 1;
   }
+
   50% {
     width: 20px;
     height: 20px;
     opacity: 1;
   }
+
   100% {
     width: 20px;
     height: 20px;
@@ -358,9 +361,11 @@ input:focus {
   .form {
     padding: 30px 80px;
   }
+
   .register-form {
     width: 80%;
   }
+
   .license-text {
     font-size: 14px;
     padding: 20px;
@@ -371,23 +376,26 @@ input:focus {
   .form {
     padding: 20px 40px;
   }
+
   .register-form {
     width: 100%;
     font-size: 14px;
   }
+
   .license-text {
     font-size: 12px;
     /* padding: 20px; */
   }
-  
+
 }
 
 @media (max-width: 600px) {
   .form {
     padding: 10px 10px;
     width: 90%;
-    height: 80%;
+    height: 100%;
   }
+
   .license-text {
     font-size: 10px;
     padding: 10px;
