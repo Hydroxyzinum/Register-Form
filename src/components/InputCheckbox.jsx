@@ -1,12 +1,9 @@
-const InputField = ({
+const InputCheckbox = ({
   type,
   onChange,
   value,
   className,
-  maxLength,
-  minLength,
   id,
-  placeholder,
   name,
   ariaLabel,
   ariaInvaild,
@@ -20,18 +17,14 @@ const InputField = ({
         onChange={onChange}
         type={type}
         value={value}
-        placeholder={placeholder}
         id={id}
         className={className}
-        maxLength={maxLength}
-        minLength={minLength}
         name={name}
         aria-label={ariaLabel}
         aria-invalid={ariaInvaild}
-
       />
     </>
   );
 };
 
-export default InputField;
+export default InputCheckbox;

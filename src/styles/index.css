@@ -34,7 +34,7 @@ body {
   justify-content: center;
   background-color: white;
   width: 70%;
-  height: 70vh;
+  height: auto;
   border-radius: 20px;
   position: absolute;
   left: 50%;
@@ -54,6 +54,7 @@ body {
   margin: 20px 10px;
   font-size: 36px;
   font-weight: 400;
+  text-align: center;
 }
 
 .register-form {
@@ -393,7 +394,6 @@ input:focus {
   .form {
     padding: 10px 10px;
     width: 90%;
-    height: 100%;
   }
 
   .license-text {
