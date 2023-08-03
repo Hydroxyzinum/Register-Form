@@ -270,7 +270,6 @@ input:focus {
   background-color: #0575E6;
   color: white;
   border-radius: 20px;
-  /* transition: 2s all; */
   cursor: pointer;
 }
 
@@ -385,9 +384,7 @@ input:focus {
 
   .license-text {
     font-size: 12px;
-    /* padding: 20px; */
   }
-
 }
 
 @media (max-width: 600px) {

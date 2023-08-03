@@ -167,7 +167,7 @@ const Form = () => {
             aria-invalid={state.validateRules ? "true" : "false"}
           />
           <span className={checkboxClassGenerator(state.validateRules)}>
-            Согласен на обработку данных
+            Согласен(a) на обработку данных
           </span>
         </div>
       </div>
